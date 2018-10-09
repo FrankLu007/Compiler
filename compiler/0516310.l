@@ -82,6 +82,7 @@ id ((_|{letter})(_|{letter}|{digit})*)
 <INITIAL>\" {
 	LIST;
 	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
+	for(int i = 0 ; i < MAX_LINE_LENGTH ; i++) str[i] = 0;
 	BEGIN string;
 }
 <INITIAL>{token} {
