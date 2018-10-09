@@ -21,7 +21,7 @@ digit [0-9]
 delimiter ("("|")"|"["|"]"|"{"|"}"|";"|",")
 letter [a-zA-Z]
 token ("+"|"-"|"*"|"/"|"%"|"="|"<="|"<"|"=="|">"|">="|"&&"|"||"|"!")
-pragma (#pragma)
+pragma ("#pragma")
 integer (0|[1-9]{digit}*)
 float ({integer}\.{digit}+)
 scientific (({float}|{double})[Ee]("+"|"-"){digit}+)
@@ -143,12 +143,12 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	BEGIN INITIAL;
 }
 <comment>. LIST;
-<string>\" {
+<string>"\"" {
 	tokenString("string", str);
 	free(str);
 	BEGIN INITIAL;
 }
-<string>\\\" {
+<string>"\\\"" {
 	LIST;
 	strcat(str, yytext);
 }
@@ -177,6 +177,7 @@ int main( int argc, char **argv )
     if (Opt_Statistic)
     {
         // Print frequency table
+        printf("%d\n", idn);
         for(int i = 0 ; i < idn ; i++) printf("%s %d\n", idname[i], idnum);
     }
 
