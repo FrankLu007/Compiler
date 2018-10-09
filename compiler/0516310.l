@@ -27,7 +27,7 @@ id (({letter}|_)[_|{letter}|{digit}]*)
 %START pragma comment string
 %%
 
-" " {lIST;}
+" " {LIST;}
 {pragma} {
 	LIST;
 	status_pragrma = 1;
