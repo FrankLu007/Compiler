@@ -24,7 +24,7 @@ float ({integer}\.{digit}+)
 scientific (({float}|{double})[Ee]("+"|"-"){digit}+)
 id (({letter}|_)[_|{letter}|{digit}]*)
 
-%START pragma, comment, string
+%START pragma comment string
 %%
 
 " " {list;}
