@@ -23,9 +23,9 @@ letter [a-zA-Z]
 token ("+"|"-"|"*"|"/"|"%"|"="|"<="|"<"|"=="|">"|">="|"&&"|"||"|"!")
 pragma ("#pragma")
 integer (0|[1-9]{digit}*)
-float ({integer}\.{digit}+)
-scientific (({float}|{integer})("E"|"e")("+"|"-"){digit}+)
-id (({letter}|_)(_|{letter}|{digit})*)
+float ({digit}+\.{digit}+)
+scientific (({float}|{digit}+)("E"|"e")("+"|"-"|""){digit}+)
+id ((_|{letter})(_|{letter}|{digit})*)
 
 %START pragma comment string
 %%
@@ -65,9 +65,13 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	free(str);
 	BEGIN INITIAL;
 }
-<string>\\\" {
+<string>\\n {
 	LIST;
 	strcat(str, yytext);
+}
+<string>\\. {
+	LIST;
+	strcat(str, yytext[1]);
 }
 <string>. {
 	LIST;
