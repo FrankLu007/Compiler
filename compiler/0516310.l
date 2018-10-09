@@ -8,7 +8,6 @@ int Opt_Source = 1;
 int Opt_Token = 1;
 int Opt_Statistic = 1;
 int linenum = 1;
-int strlen = 0;
 int status_pragrma = 0;
 char *str;
 char buf[MAX_LINE_LENGTH];
@@ -60,8 +59,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 
 \" {
 	LIST;
-	str = new char[MAX_LINE_LENGTH];
-	strlen = 0;
+	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
 	BEGIN string;
 }
 \n {
@@ -136,7 +134,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 }
 <string>\" {
 	tokenString("string", str);
-	delete str;
+	free(str);
 	BEGIN INITIAL;
 }
 <string>. {
