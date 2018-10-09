@@ -9,6 +9,9 @@ int Opt_Token = 1;
 int Opt_Statistic = 1;
 int linenum = 1;
 int status_pragrma = 0;
+int idn = 0;
+int idnum[MAX_LINE_LENGTH];
+char *idname[MAX_LINE_LENGTH];
 char *str;
 char buf[MAX_LINE_LENGTH];
 %}
@@ -27,17 +30,13 @@ id (({letter}|_)(_|{letter}|{digit})*)
 %START pragma comment string
 %%
 
-[ \t]+ {LIST;}
-{pragma} {
+[ \t]+ LIST;
+"//".* LIST;
+\" {
+	printf("string\n");
 	LIST;
-	status_pragrma = 1;
-	BEGIN pragma;
-}
-{delimiter} {
-	tokenString("delim", yytext);
-}
-["//"].* {
-    LIST;
+	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
+	BEGIN string;
 }
 {token} {
 	token(yytext);
@@ -45,6 +44,14 @@ id (({letter}|_)(_|{letter}|{digit})*)
 "/*" {
     LIST;
     BEGIN comment;
+}
+{pragma} {
+	LIST;
+	status_pragrma = 1;
+	BEGIN pragma;
+}
+{delimiter} {
+	tokenString("delim", yytext);
 }
 {float} {
 	tokenString("float", yytext);
@@ -56,12 +63,6 @@ id (({letter}|_)(_|{letter}|{digit})*)
 {KW} {
     tokenString("KW", yytext);
 }
-
-\" {
-	LIST;
-	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
-	BEGIN string;
-}
 \n {
     LIST;
     if (Opt_Source)
@@ -71,6 +72,21 @@ id (({letter}|_)(_|{letter}|{digit})*)
 }
 {id} {
 	tokenString("id", yytext);
+	int find = 1;
+	for(int i = 0 ; i < idn ; i++) 
+	{
+		if(!strcmp(idname[i], yytext))
+		{
+			find = 0;
+			idnum[i]++;
+			break;
+		}
+	}
+	if(find)
+	{
+		idnum[idn] = 1;
+		idname[idn++] = yytext;
+	}
 }
 . { // Unrecognized character
     fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
@@ -115,7 +131,6 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
     exit(1);
 }
-<comment>. LIST;
 <comment>\n {
 	LIST;
     if (Opt_Source)
@@ -128,6 +143,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	if(status_pragrma) BEGIN pragma;
 	BEGIN INITIAL;
 }
+<comment>. LIST;
 <string>\\\" {
 	LIST;
 	strcat(str, yytext);
