@@ -30,71 +30,6 @@ id (({letter}|_)(_|{letter}|{digit})*)
 %START pragma comment string
 %%
 
-[ \t]+ LIST;
-"//".* LIST;
-\" {
-	LIST;
-	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
-	BEGIN string;
-}
-{token} {
-	token(yytext);
-}
-"/*" {
-    LIST;
-    BEGIN comment;
-}
-{pragma} {
-	LIST;
-	status_pragrma = 1;
-	BEGIN pragma;
-}
-{delimiter} {
-	tokenString("delim", yytext);
-}
-{float} {
-	tokenString("float", yytext);
-}
-{integer} {
-	tokenString("integer", yytext);
-}
-
-{KW} {
-    tokenString("KW", yytext);
-}
-\n {
-    LIST;
-    if (Opt_Source)
-        printf("%d:%s\n", linenum, buf);
-    ++linenum;
-    buf[0] = '\0';
-}
-{id} {
-	tokenString("id", yytext);
-	int find = 1;
-	for(int i = 0 ; i < idn ; i++) 
-	{
-		if(!strcmp(idname[i], yytext))
-		{
-			find = 0;
-			idnum[i]++;
-			break;
-		}
-	}
-	if(find)
-	{
-		idnum[idn] = 1;
-		idname[idn] = malloc(sizeof(yytext));
-		strcat(idname[idn], yytext);
-	}
-}
-{scientific} {
-	tokenString("scientific", yytext);
-}
-. { // Unrecognized character
-    fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
-    exit(1);
-}
 <pragma>\n {
 	LIST;
 	status_pragrma = 0;
@@ -160,6 +95,73 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	LIST;
 	strcat(str, yytext);
 }
+
+[ \t]+ LIST;
+"//".* LIST;
+\" {
+	LIST;
+	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
+	BEGIN string;
+}
+{token} {
+	token(yytext);
+}
+"/*" {
+    LIST;
+    BEGIN comment;
+}
+{pragma} {
+	LIST;
+	status_pragrma = 1;
+	BEGIN pragma;
+}
+{delimiter} {
+	tokenString("delim", yytext);
+}
+{float} {
+	tokenString("float", yytext);
+}
+{integer} {
+	tokenString("integer", yytext);
+}
+
+{KW} {
+    tokenString("KW", yytext);
+}
+\n {
+    LIST;
+    if (Opt_Source)
+        printf("%d:%s\n", linenum, buf);
+    ++linenum;
+    buf[0] = '\0';
+}
+{id} {
+	tokenString("id", yytext);
+	int find = 1;
+	for(int i = 0 ; i < idn ; i++) 
+	{
+		if(!strcmp(idname[i], yytext))
+		{
+			find = 0;
+			idnum[i]++;
+			break;
+		}
+	}
+	if(find)
+	{
+		idnum[idn] = 1;
+		idname[idn] = malloc(sizeof(yytext));
+		strcat(idname[idn++], yytext);
+	}
+}
+{scientific} {
+	tokenString("scientific", yytext);
+}
+. { // Unrecognized character
+    fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
+    exit(1);
+}
+
 %%
 
 int main( int argc, char **argv )
@@ -181,7 +183,6 @@ int main( int argc, char **argv )
     if (Opt_Statistic)
     {
         // Print frequency table
-        printf("%d\n", idn);
         for(int i = 0 ; i < idn ; i++) printf("%s %d\n", idname[i], idnum[i]);
     }
 
