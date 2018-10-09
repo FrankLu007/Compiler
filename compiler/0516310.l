@@ -117,7 +117,7 @@ KW {
         printf("%d:%s\n", linenum, buf);
     ++linenum;
 }
-<pragma>// {
+<pragma>"//" {
 	yyless(2);
 	BEGIN INITIAL;
 }
@@ -133,7 +133,7 @@ KW {
     ++linenum;
     buf[0] = '\0';
 }
-<comment>*/ {
+<comment>"*/" {
 	LIST;
 	if(status_pragrma) BEGIN pragma;
 	BEGIN INITIAL;
