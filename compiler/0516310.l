@@ -24,6 +24,7 @@ float ({integer}\.{digit}+)
 scientific (({float}|{double})[Ee]("+"|"-"){digit}+)
 id (({letter}|_)[_|{letter}|{digit}]*)
 
+%START pragma, comment, string
 %%
 
 " " {list;}
@@ -116,7 +117,7 @@ KW {
         printf("%d:%s\n", linenum, buf);
     ++linenum;
 }
-<pragma> //{
+<pragma>//{
 	yyless(2);
 	BEGIN INITIAL;
 }
