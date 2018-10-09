@@ -19,7 +19,7 @@ delimiter ("("|")"|"["|"]"|"{"|"}"|";"|",")
 letter [a-zA-Z]
 token ("+"|"-"|"*"|"/"|"%"|"="|"<="|"<"|"=="|">"|">="|"&&"|"||"|"!")
 pragma (#pragma)
-integer (0|[1-9]{digit}+)
+integer (0|[1-9]{digit}*)
 float ({integer}\.{digit}+)
 scientific (({float}|{double})[Ee]("+"|"-"){digit}+)
 id (({letter}|_)(_|{letter}|{digit})*)
@@ -34,7 +34,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	BEGIN pragma;
 }
 {delimiter} {
-	token(yytext);
+	tokenString("delim", yytext);
 }
 ["//"].* {
     LIST;
@@ -53,7 +53,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	tokenString("integer", yytext);
 }
 
-KW {
+{KW} {
     tokenString("KW", yytext);
 }
 
