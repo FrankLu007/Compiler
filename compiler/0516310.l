@@ -57,7 +57,7 @@ id ((_|{letter})(_|{letter}|{digit})*)
 <comment>"*/" {
 	LIST;
 	if(status_pragrma) BEGIN pragma;
-	BEGIN INITIAL;
+	else BEGIN INITIAL;
 }
 <comment>. LIST;
 <string>\" {
@@ -65,13 +65,13 @@ id ((_|{letter})(_|{letter}|{digit})*)
 	free(str);
 	BEGIN INITIAL;
 }
-<string>\\n {
+<string>\\{letter} {
 	LIST;
 	strcat(str, yytext);
 }
 <string>\\. {
 	LIST;
-	strcat(str, yytext[1]);
+	strcat(str, yytext+1);
 }
 <string>. {
 	LIST;
@@ -111,11 +111,16 @@ id ((_|{letter})(_|{letter}|{digit})*)
 }
 \n {
     LIST;
-    status_pragrma = 0;
+    
     if (Opt_Source)
         printf("%d:%s\n", linenum, buf);
     ++linenum;
     buf[0] = '\0';
+    if(status_pragrma)
+    {
+    	status_pragrma = 0;
+    	BEGIN INITIAL;
+    }
 }
 <INITIAL>{id} {
 	tokenString("id", yytext);
@@ -133,6 +138,7 @@ id ((_|{letter})(_|{letter}|{digit})*)
 	{
 		idnum[idn] = 1;
 		idname[idn] = malloc(sizeof(yytext));
+		for(int i = 0 ; i < sizeof(yytext) ; i++) idname[idn][i] = 0;
 		strcat(idname[idn++], yytext);
 	}
 }
