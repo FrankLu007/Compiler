@@ -13,16 +13,16 @@ bool status_pragrma = 0;
 char buf[MAX_LINE_LENGTH];
 %}
 
-KW ["while"|"do"|"if"|"else"|"true"|"false"|"for"|"int"|"print"|"const"|"read"|"boolean"|"bool"|"void"|"float"|"double"|"string"|"continue"|"break"|"return"]
+KW ("while"|"do"|"if"|"else"|"true"|"false"|"for"|"int"|"print"|"const"|"read"|"boolean"|"bool"|"void"|"float"|"double"|"string"|"continue"|"break"|"return")
 digit [0-9]
-delimiter ["("|")"|"["|"]"|"{"|"}"|";"|","]
+delimiter ("("|")"|"["|"]"|"{"|"}"|";"|",")
 letter [a-zA-Z]
-token ["+"|"-"|"*"|"/"|"%"|"="|"<="|"<"|"=="|">"|">="|"&&"|"||"|"!"]
-pragma ["#pragma"]
-integer [0|[1-9]{digit}+]
-float [{integer}\.{digit}+]
-scientific [[{float}|{double}]["E"|"e"]["+"|"-"]{digit}+]
-id [{letter}[{letter}|{digit}]*]
+token ("+"|"-"|"*"|"/"|"%"|"="|"<="|"<"|"=="|">"|">="|"&&"|"||"|"!")
+pragma (#pragma)
+integer (0|[1-9]{digit}+)
+float ({integer}\.{digit}+)
+scientific (({float}|{double})[Ee]("+"|"-"){digit}+)
+id (({letter}|_)[_|{letter}|{digit}]*)
 
 %%
 
