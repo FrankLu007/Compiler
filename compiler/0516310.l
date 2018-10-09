@@ -33,7 +33,6 @@ id (({letter}|_)(_|{letter}|{digit})*)
 [ \t]+ LIST;
 "//".* LIST;
 \" {
-	printf("string\n");
 	LIST;
 	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
 	BEGIN string;
@@ -92,6 +91,17 @@ id (({letter}|_)(_|{letter}|{digit})*)
     fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
     exit(1);
 }
+<pragma>\n {
+	LIST;
+	status_pragrma = 0;
+	if (Opt_Source)
+        printf("%d:%s\n", linenum, buf);
+    ++linenum;
+}
+<pragma>"//" {
+	yyless(2);
+	BEGIN INITIAL;
+}
 <pragma>"source on" {
 	LIST;
 	Opt_Source = 1;
@@ -116,17 +126,6 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	LIST;
 	Opt_Statistic = 0;
 }
-<pragma>\n {
-	LIST;
-	status_pragrma = 0;
-	if (Opt_Source)
-        printf("%d:%s\n", linenum, buf);
-    ++linenum;
-}
-<pragma>"//" {
-	yyless(2);
-	BEGIN INITIAL;
-}
 <pragma>. {
 	fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
     exit(1);
@@ -144,14 +143,14 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	BEGIN INITIAL;
 }
 <comment>. LIST;
-<string>\\\" {
-	LIST;
-	strcat(str, yytext);
-}
 <string>\" {
 	tokenString("string", str);
 	free(str);
 	BEGIN INITIAL;
+}
+<string>\\\" {
+	LIST;
+	strcat(str, yytext);
 }
 <string>. {
 	LIST;
@@ -178,6 +177,7 @@ int main( int argc, char **argv )
     if (Opt_Statistic)
     {
         // Print frequency table
+        for(int i = 0 ; i < idn ; i++) printf("%s %d\n", idname[i], idnum);
     }
 
     exit(0);
