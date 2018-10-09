@@ -1,6 +1,6 @@
 %{
 #define LIST                { strncat(buf, yytext, sizeof(buf) - strlen(buf) - 1); }
-#define token(t)            { LIST; if (Opt_Token) printf("<%s>\n", #t); }
+#define token(t)            { LIST; if (Opt_Token) printf("<%s>\n", t); }
 #define tokenString(t, s)   { LIST; if (Opt_Token) printf("<%s:%s>\n", t, s); }
 #define MAX_LINE_LENGTH 257
 #define MAX_ID_LENGTH 257
@@ -22,31 +22,24 @@ pragma (#pragma)
 integer (0|[1-9]{digit}+)
 float ({integer}\.{digit}+)
 scientific (({float}|{double})[Ee]("+"|"-"){digit}+)
-id (({letter}|_)[_|{letter}|{digit}]*)
+id (({letter}|_)(_|{letter}|{digit})*)
 
 %START pragma comment string
 %%
 
-" " {LIST;}
+[ \t]+ {LIST;}
 {pragma} {
 	LIST;
 	status_pragrma = 1;
 	BEGIN pragma;
 }
 {delimiter} {
-	LIST;
 	token(yytext);
 }
 ["//"].* {
     LIST;
-    if (Opt_Source)
-    {
-        printf("%d:%s\n", linenum, buf);
-        ++linenum;
-    }
 }
 {token} {
-	LIST;
 	token(yytext);
 }
 "/*" {
@@ -54,16 +47,13 @@ id (({letter}|_)[_|{letter}|{digit}]*)
     BEGIN comment;
 }
 {float} {
-	LIST;
 	tokenString("float", yytext);
 }
 {integer} {
-	LIST;
 	tokenString("integer", yytext);
 }
 
 KW {
-	LIST;
     tokenString("KW", yytext);
 }
 
@@ -79,7 +69,6 @@ KW {
     buf[0] = '\0';
 }
 {id} {
-	LIST;
 	tokenString("id", yytext);
 }
 . { // Unrecognized character
@@ -143,7 +132,6 @@ KW {
 	strcat(str, yytext);
 }
 <string>\" {
-	LIST;
 	tokenString("string", str);
 	*str = "";
 }
