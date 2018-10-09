@@ -30,17 +30,6 @@ id (({letter}|_)(_|{letter}|{digit})*)
 %START pragma comment string
 %%
 
-<pragma>\n {
-	LIST;
-	status_pragrma = 0;
-	if (Opt_Source)
-        printf("%d:%s\n", linenum, buf);
-    ++linenum;
-}
-<pragma>"//" {
-	yyless(2);
-	BEGIN INITIAL;
-}
 <pragma>"source on" {
 	LIST;
 	Opt_Source = 1;
@@ -65,29 +54,18 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	LIST;
 	Opt_Statistic = 0;
 }
-<pragma>. {
-	fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
-    exit(1);
-}
-<comment>\n {
-	LIST;
-    if (Opt_Source)
-        printf("%d:%s\n", linenum, buf);
-    ++linenum;
-    buf[0] = '\0';
-}
 <comment>"*/" {
 	LIST;
 	if(status_pragrma) BEGIN pragma;
 	BEGIN INITIAL;
 }
 <comment>. LIST;
-<string>"\"" {
+<string>\" {
 	tokenString("string", str);
 	free(str);
 	BEGIN INITIAL;
 }
-<string>"\\\"" {
+<string>\\\" {
 	LIST;
 	strcat(str, yytext);
 }
@@ -95,47 +73,47 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	LIST;
 	strcat(str, yytext);
 }
-
 [ \t]+ LIST;
 "//".* LIST;
-\" {
+<INITIAL>\" {
 	LIST;
 	str = (char*)malloc(sizeof(char)*MAX_LINE_LENGTH);
 	BEGIN string;
 }
-{token} {
+<INITIAL>{token} {
 	token(yytext);
 }
 "/*" {
     LIST;
     BEGIN comment;
 }
-{pragma} {
+<INITIAL>{pragma} {
 	LIST;
 	status_pragrma = 1;
 	BEGIN pragma;
 }
-{delimiter} {
+<INITIAL>{delimiter} {
 	tokenString("delim", yytext);
 }
-{float} {
+<INITIAL>{float} {
 	tokenString("float", yytext);
 }
-{integer} {
+<INITIAL>{integer} {
 	tokenString("integer", yytext);
 }
 
-{KW} {
+<INITIAL>{KW} {
     tokenString("KW", yytext);
 }
 \n {
     LIST;
+    status_pragrma = 0;
     if (Opt_Source)
         printf("%d:%s\n", linenum, buf);
     ++linenum;
     buf[0] = '\0';
 }
-{id} {
+<INITIAL>{id} {
 	tokenString("id", yytext);
 	int find = 1;
 	for(int i = 0 ; i < idn ; i++) 
@@ -154,7 +132,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 		strcat(idname[idn++], yytext);
 	}
 }
-{scientific} {
+<INITIAL>{scientific} {
 	tokenString("scientific", yytext);
 }
 . { // Unrecognized character
