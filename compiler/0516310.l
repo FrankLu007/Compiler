@@ -8,8 +8,8 @@ int Opt_Source = 1;
 int Opt_Token = 1;
 int Opt_Statistic = 1;
 int linenum = 1;
+int status_pragrma = 0;
 char *str = "";
-bool status_pragrma = 0;
 char buf[MAX_LINE_LENGTH];
 %}
 
@@ -27,7 +27,7 @@ id (({letter}|_)[_|{letter}|{digit}]*)
 %START pragma comment string
 %%
 
-" " {list;}
+" " {lIST;}
 {pragma} {
 	LIST;
 	status_pragrma = 1;
@@ -46,7 +46,7 @@ id (({letter}|_)[_|{letter}|{digit}]*)
     }
 }
 {token} {
-	LOST;
+	LIST;
 	token(yytext);
 }
 "/*" {
