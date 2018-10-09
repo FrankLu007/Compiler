@@ -117,7 +117,7 @@ KW {
         printf("%d:%s\n", linenum, buf);
     ++linenum;
 }
-<pragma>//{
+<pragma>// {
 	yyless(2);
 	BEGIN INITIAL;
 }
@@ -138,7 +138,7 @@ KW {
 	if(status_pragrma) BEGIN pragma;
 	BEGIN INITIAL;
 }
-<string>"\"" {
+<string>\\\" {
 	LIST;
 	strcat(str, yytext);
 }
