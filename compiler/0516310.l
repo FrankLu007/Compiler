@@ -1,6 +1,6 @@
 %{
 #define LIST                { strncat(buf, yytext, sizeof(buf) - strlen(buf) - 1); }
-#define token(t)            { LIST; if (Opt_Token) printf("<%s>\n", t); }
+#define token(t)            { LIST; if (Opt_Token) printf("<\"%s\">\n", t); }
 #define tokenString(t, s)   { LIST; if (Opt_Token) printf("<%s:%s>\n", t, s); }
 #define MAX_LINE_LENGTH 257
 #define MAX_ID_LENGTH 257
@@ -59,6 +59,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 
 \" {
 	LIST;
+	*str = "";
 	BEGIN string;
 }
 \n {
@@ -134,6 +135,7 @@ id (({letter}|_)(_|{letter}|{digit})*)
 <string>\" {
 	tokenString("string", str);
 	*str = "";
+	BEGIN INITIAL;
 }
 <string>. {
 	LIST;
