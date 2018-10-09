@@ -35,7 +35,7 @@ id (({letter}|_)[_|{letter}|{digit}]*)
 }
 {delimiter} {
 	LIST;
-	tolken(yytext);
+	token(yytext);
 }
 ["//"].* {
     LIST;
@@ -94,11 +94,11 @@ KW {
 	LIST;
 	Opt_Source = 0;
 }
-<pragma>"tolken on" {
+<pragma>"token on" {
 	LIST;
 	Opt_Token = 1;
 }
-<pragma>"tolken off" {
+<pragma>"token off" {
 	LIST;
 	Opt_Token = 0;
 }
