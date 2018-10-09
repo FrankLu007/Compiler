@@ -24,7 +24,7 @@ token ("+"|"-"|"*"|"/"|"%"|"="|"<="|"<"|"=="|">"|">="|"&&"|"||"|"!")
 pragma ("#pragma")
 integer (0|[1-9]{digit}*)
 float ({integer}\.{digit}+)
-scientific (({float}|{double})[Ee]("+"|"-"){digit}+)
+scientific (({float}|{integer})("E"|"e")("+"|"-"){digit}+)
 id (({letter}|_)(_|{letter}|{digit})*)
 
 %START pragma comment string
@@ -84,8 +84,12 @@ id (({letter}|_)(_|{letter}|{digit})*)
 	if(find)
 	{
 		idnum[idn] = 1;
-		idname[idn++] = yytext;
+		idname[idn] = malloc(sizeof(yytext));
+		strcat(idname[idn], yytext);
 	}
+}
+{scientific} {
+	tokenString("scientific", yytext);
 }
 . { // Unrecognized character
     fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
@@ -178,7 +182,7 @@ int main( int argc, char **argv )
     {
         // Print frequency table
         printf("%d\n", idn);
-        for(int i = 0 ; i < idn ; i++) printf("%s %d\n", idname[i], idnum);
+        for(int i = 0 ; i < idn ; i++) printf("%s %d\n", idname[i], idnum[i]);
     }
 
     exit(0);
