@@ -138,11 +138,11 @@ id *new_id();
         }
 ")"     {
                 tokenString("delim", ")");
-                return ')'
+                return ')';
         }
 ","     {
                 tokenString("delim", ",");
-                return ','
+                return ',';
         }
 ";"     {
                 tokenString("delim", ";");
@@ -150,47 +150,47 @@ id *new_id();
         }
 "["     {
                 tokenString("delim", "[");
-                return '['
+                return '[';
         }
 "]"     {
                 tokenString("delim", "]");
-                return ']'
+                return ']';
         }
 "{"     {
                 tokenString("delim", "{");
-                return '{'
+                return '{';
         }
 "}"     {
                 tokenString("delim", "}");
-                return '}'
+                return '}';
         }
 "+"     {
                 token("+");
-                return '+'
+                return '+';
         }
 "-"     {
                 token("-");
-                return '-'
+                return '-';
         }
 "*"     {
                 token("*");
-                return '*'
+                return '*';
         }
 "/"     {
                 token("/");
-                return '/'
+                return '/';
         }
 "%"     {
                 token("%");
-                return '%'
+                return '%';
         }
 "="     {
                 token("=");
-                return '='
+                return '=';
         }
 "<"     {
                 token("<");
-                return '<'
+                return '<';
         }
 "<="    {
                 token("<=");
@@ -206,15 +206,15 @@ id *new_id();
         }
 ">"     {
                 token(">");
-                return '>'
+                return '>';
         }
 "=="    {
                 token("==");
-                return EQUAL
+                return EQUAL;
         }
 "&&"    {
                 token("&&");
-                return AND
+                return AND;
         }
 "||"    {
                 token("||");
@@ -230,7 +230,7 @@ read {
       }
 boolean {
             tokenString("KW", yytext);
-            return BOOLEAN;
+            return BOOL;
       }
 while {
             tokenString("KW", yytext);
@@ -242,7 +242,7 @@ do {
       }
 if {
             tokenString("KW", yytext);
-            return IFD;
+            return IF;
       }
 else {
             tokenString("KW", yytext);

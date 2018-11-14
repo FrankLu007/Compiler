@@ -11,7 +11,7 @@ extern char buf[256];           /* declared in lex.l */
 %token SEMICOLON
 %token INT
 %token INT_V
-%token while
+%token WHILE
 %token DO
 %token IF
 %token TRUE
@@ -23,12 +23,13 @@ extern char buf[256];           /* declared in lex.l */
 %token BOOL
 %token VOID
 %token FLOAT
+%token FLOAT_V
 %token DOUBLE
 %token STRING
 %token CONTINUE
 %token BREAK
 %token RETURN
-%token ID           
+%token ID
 %token NUM
 %token STRING
 %token STRING_V
@@ -37,7 +38,7 @@ extern char buf[256];           /* declared in lex.l */
 %nonassoc ELSE
 %%
 
-program : declaration funct_def def_and decl
+program : declaration funct_defi def_and_decl
         ;
 def_and_decl : def_and_decl declaration
              | def_and_decl definition
@@ -53,7 +54,7 @@ definition : definition funct_defi
            |
            ;
 const_decl : CONST type id_v SEMICOLON ;
-var_decl : type ids SEMIMCOLON ;
+var_decl : type ids SEMICOLON ;
 funct_decl : type ID '(' args ')' SEMICOLON
            | VOID ID '(' args ')' SEMICOLON
            ;
@@ -64,7 +65,7 @@ id_v : ID '=' express | ID array '=' STRING_V;
 ids : ids ',' ID
     | ids ',' ID array
     | ids ',' id_v
-    | ID 
+    | ID
     | ID array
     | id_v
     ;
@@ -85,7 +86,7 @@ _express : _express ',' ex
          | ex
          ;
 cmp : '<' | '>' | EQUAL | NOTEQUAL | GREATEREQUAL | LESSEQUAL | EQUAL;
-op : AND | OR | '+' | '-' | '*' | '/' | '%'; 
+op : AND | OR | '+' | '-' | '*' | '/' | '%';
 ex : ex cmp ex
    | ex op ex
    | '!' ex
@@ -121,7 +122,7 @@ IO : PRINT ex
    ;
 for : FOR '(' ex_for SEMICOLON ex_for SEMICOLON ex_for ')';
 ex_for : ID '=' ex | ex ;
-control : RETUEN ex SEMICOLON
+control : RETURN ex SEMICOLON
         | BREAK SEMICOLON
         | CONTINUE SEMICOLON
         ;
