@@ -83,10 +83,12 @@ _express : _express ',' ex
          | ex
          ;
 cmp : '<' | '>' | EQUAL | NOTEQUAL | GREATEREQUAL | LESSEQUAL | EQUAL;
-op : AND | OR | '+' | '-' | '*' | '/' | '%';
-ex : ex cmp ex
-   | ex op ex
+op : '+' | '-' | '*' | '/' | '%';
+ex : ex AND ex
+   | ex OR ex
    | '!' ex
+   | ex cmp ex
+   | ex op ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
    | ID
