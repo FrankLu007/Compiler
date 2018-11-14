@@ -56,6 +56,7 @@ funct_decl : type ID '(' args ')' SEMICOLON
            ;
 funct_defi : type ID '(' args ')' MOVS
            | VOID ID '(' args ')' MOVS
+           ;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 id_v : ID '=' express | ID array '=' STRING_V;
 ids : ids ',' ID
