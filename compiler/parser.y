@@ -7,7 +7,7 @@ extern FILE *yyin;              /* declared by lex */
 extern char *yytext;            /* declared by lex */
 extern char buf[256];           /* declared in lex.l */
 %}
-
+%token L_P R_P L_B R_B L_S R_S
 %token SEMICOLON
 %token INT
 %token INT_V

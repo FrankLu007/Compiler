@@ -134,11 +134,11 @@ id *new_id();
         }
 "("     {
                 tokenString("delim", "(");
-                return '(';
+                return L_P;
         }
 ")"     {
                 tokenString("delim", ")");
-                return ')';
+                return R_P;
         }
 ","     {
                 tokenString("delim", ",");
@@ -150,19 +150,19 @@ id *new_id();
         }
 "["     {
                 tokenString("delim", "[");
-                return '[';
+                return L_S;
         }
 "]"     {
                 tokenString("delim", "]");
-                return ']';
+                return R_S;
         }
 "{"     {
                 tokenString("delim", "{");
-                return '{';
+                return L_B;
         }
 "}"     {
                 tokenString("delim", "}");
-                return '}';
+                return R_B;
         }
 "+"     {
                 token("+");
