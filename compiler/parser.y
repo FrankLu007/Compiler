@@ -58,7 +58,11 @@ funct_defi : type ID '(' args ')' MOVS
            | VOID ID '(' args ')' MOVS
            ;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
-id_v : ID '=' express | ID array '=' STRING_V;
+id_v : id_v ',' ID '=' express 
+     | id_v ',' ID array '=' STRING_V
+     | ID '=' express
+     | ID array '=' STRING_V
+     ;
 ids : ids ',' ID
     | ids ',' ID array
     | ids ',' id_v
@@ -94,6 +98,7 @@ ex : ex AND ex
    | ID
    | ID array
    | ID '(' express ')'
+   | ID '=' 
    | INT_V
    | FLOAT_V
    | STRING_V
