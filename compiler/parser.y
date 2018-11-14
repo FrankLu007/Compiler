@@ -41,16 +41,12 @@ extern char buf[256];           /* declared in lex.l */
 program : declaration funct_defi def_and_decl
         ;
 def_and_decl : def_and_decl declaration
-             | def_and_decl definition
+             | def_and_decl funct_defi
              |
              ;
 declaration : declaration const_decl
            | declaration var_decl
            | declaration funct_decl
-           |
-           ;
-
-definition : definition funct_defi
            |
            ;
 const_decl : CONST type id_v SEMICOLON ;
