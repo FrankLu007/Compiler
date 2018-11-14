@@ -134,109 +134,190 @@ id *new_id();
         }
 "("     {
                 tokenString("delim", "(");
+                return '(';
         }
 ")"     {
                 tokenString("delim", ")");
+                return ')'
         }
 ","     {
                 tokenString("delim", ",");
+                return ','
         }
 ";"     {
                 tokenString("delim", ";");
+                return SEMICOLON;
         }
 "["     {
                 tokenString("delim", "[");
+                return '['
         }
 "]"     {
                 tokenString("delim", "]");
+                return ']'
         }
 "{"     {
                 tokenString("delim", "{");
+                return '{'
         }
 "}"     {
                 tokenString("delim", "}");
+                return '}'
         }
 "+"     {
                 token("+");
+                return '+'
         }
 "-"     {
                 token("-");
+                return '-'
         }
 "*"     {
                 token("*");
+                return '*'
         }
 "/"     {
                 token("/");
+                return '/'
         }
 "%"     {
                 token("%");
+                return '%'
         }
 "="     {
                 token("=");
+                return '='
         }
 "<"     {
                 token("<");
+                return '<'
         }
 "<="    {
                 token("<=");
+                return LESSEQUAL;
         }
 "!="    {
                 token("!=");
+                return NOTEQUAL;
         }
 ">="    {
                 token(">=");
+                return GREATEREQUAL;
         }
 ">"     {
                 token(">");
+                return '>'
         }
 "=="    {
                 token("==");
+                return EQUAL
         }
 "&&"    {
                 token("&&");
+                return AND
         }
 "||"    {
                 token("||");
+                return OR;
         }
 "!"     {
                 token("!");
+                return '!';
         }
-read |
-boolean |
-while |
-do |
-if |
-else |
-true |
-false |
-for |
-const |
-int |
-print |
-bool |
-void |
-float |
-double |
-string |
-continue |
-break |
+read {
+            tokenString("KW", yytext);
+            return READ;
+      }
+boolean {
+            tokenString("KW", yytext);
+            return BOOLEAN;
+      }
+while {
+            tokenString("KW", yytext);
+            return WHILE;
+      }
+do {
+            tokenString("KW", yytext);
+            return DO;
+      }
+if {
+            tokenString("KW", yytext);
+            return IFD;
+      }
+else {
+            tokenString("KW", yytext);
+            return ELSE;
+      }
+true {
+            tokenString("KW", yytext);
+            return TRUE;
+      }
+false {
+            tokenString("KW", yytext);
+            return FALSE;
+      }
+for {
+            tokenString("KW", yytext);
+            return FOR;
+      }
+const {
+            tokenString("KW", yytext);
+            return CONST;
+      }
+int {
+            tokenString("KW", yytext);
+            return INT;
+      }
+print {
+            tokenString("KW", yytext);
+            return PRINT;
+      }
+bool {
+            tokenString("KW", yytext);
+            return BOOL;
+      }
+void {
+            tokenString("KW", yytext);
+            return VOID;
+      }
+float {
+            tokenString("KW", yytext);
+            return FLOAT;
+      }
+double {
+            tokenString("KW", yytext);
+            return DOUBLE;
+      }
+string {
+            tokenString("KW", yytext);
+            return STRING;
+      }
+continue {
+            tokenString("KW", yytext);
+            return CONTINUE;
+      }
+break {
+            tokenString("KW", yytext);
+            return BREAK;
+      }
 return  {
-                tokenString("KW", yytext);
-        }
+            tokenString("KW", yytext);
+            return RETURN;
+      }
 
 0 |
 [1-9][0-9]* {
                 tokenString("integer", yytext);
-                return INT;
+                return INT_V;
         }
 [0-9]+\.[0-9]+  {
                 tokenString("float", yytext);
-                return FLOAT;
+                return FLOAT_V;
         }
 
 ([0-9]+|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)      {
                 tokenString("scientific", yytext);
-                return FLOAT;
+                return FLOAT_V;
         }
 "\""    {
                 LIST;
@@ -285,7 +366,7 @@ return  {
 <STR>\" {
                 tokenString("string", strContent);
                 BEGIN INITIAL;
-                return STRING;
+                return STRING_V;
 
         }
 <STR>[^\\\n\"]  {
