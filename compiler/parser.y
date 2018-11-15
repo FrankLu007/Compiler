@@ -45,6 +45,7 @@ def_and_decl : def_and_decl funct_decl
 declaration : declaration const_decl
             | declaration var_decl
             | declaration funct_decl
+            |
             ;
 const_decl : CONST type id_v SEMICOLON ;
 var_decl : type ids SEMICOLON ;
@@ -83,13 +84,20 @@ express : _express | ;
 _express : _express ',' ex
          | ex
          ;
-cmp : '<' | '>' | EQUAL | NOTEQUAL | GREATEREQUAL | LESSEQUAL | EQUAL;
-op : '+' | '-' | '*' | '/' | '%';
 ex : ex AND ex
    | ex OR ex
    | '!' ex
-   | ex cmp ex
-   | ex op ex
+   | ex '>' ex
+   | ex '<' ex
+   | ex EQUAL ex
+   | ex GREATEREQUAL ex
+   | ex NOTEQUAL ex
+   | ex LESSEQUAL ex
+   | ex '+' ex
+   | ex '-' ex
+   | ex '*' ex
+   | ex '/' ex
+   | ex '%' ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
    | value
@@ -123,9 +131,6 @@ cond : IF '(' ex ')' MOVS ELSE MOVS
 while : WHILE '(' ex ')' MOVS
       | DO MOVS WHILE '(' ex ')' SEMICOLON
       ;
-IO : PRINT ex
-   | READ ID '=' ex
-   ;
 for : FOR '(' ex_for SEMICOLON ex_for SEMICOLON ex_for ')';
 ex_for : ID '=' ex | ex ;
 control : RETURN ex SEMICOLON
