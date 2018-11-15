@@ -7,7 +7,6 @@ extern FILE *yyin;              /* declared by lex */
 extern char *yytext;            /* declared by lex */
 extern char buf[256];           /* declared in lex.l */
 %}
-%token L_P R_P L_B R_B L_S R_S
 %token SEMICOLON
 %token INT
 %token INT_V
@@ -40,8 +39,8 @@ extern char buf[256];           /* declared in lex.l */
 
 program : declaration funct_defi def_and_decl
         ;
-def_and_decl : def_and_decl declaration
-             | def_and_decl funct_defi
+def_and_decl : def_and_decl funct_defi
+             | def_and_decl declaration
              |
              ;
 declaration : declaration const_decl
@@ -59,9 +58,9 @@ funct_defi : type ID '(' args ')' MOVS
            ;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 id_v : id_v ',' ID '=' express 
-     | id_v ',' ID array '=' STRING_V
+     | id_v ',' ID array '=' '{' express '}'
      | ID '=' express
-     | ID array '=' STRING_V
+     | ID array '=' '{' express '}'
      ;
 ids : ids ',' ID
     | ids ',' ID array
@@ -76,7 +75,7 @@ _args: _args ',' type ID
      | type ID
      | type ID array
      ;
-MOVS : '{' _MOVS '}' | ;
+MOVS : '{' _MOVS '}';
 _MOVS : _MOVS const_decl
       | _MOVS var_decl
       | _MOVS state
@@ -95,25 +94,28 @@ ex : ex AND ex
    | ex op ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
-   | ID
-   | ID array
-   | ID '(' express ')'
-   | ID '=' 
    | INT_V
    | FLOAT_V
    | STRING_V
    | TRUE
    | FALSE
+   | ID array '=' ex
+   | ID '=' ex
+   | ID '(' express ')'
    ;
 array : array '[' INT_V ']' | '[' INT_V ']';
-state : '{' _MOVS '}'
+state : MOVS
+      | a_mov
       | cond
       | while
-      | ID '=' ex
-      | ex
-      | IO
       | for
       | control
+      ;
+a_mov : ID array '=' ex
+      | ID '=' ex
+      | PRINT ex
+      | READ ex
+      | ex
       ;
 cond : IF '(' ex ')' MOVS ELSE MOVS
      | IF '(' ex ')' MOVS
