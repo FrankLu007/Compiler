@@ -47,16 +47,7 @@ declaration : declaration const_decl
             | declaration funct_decl
             |
             ;
-const_decl : CONST type const SEMICOLON ;
-const : const ',' ID '=' value
-      | ID '=' value
-      ;
-var_decl : type ids SEMICOLON ;
-funct_decl : type ID '(' args ')' SEMICOLON
-           | void_decl
-           ;
-void_decl : VOID ID '(' args ')' SEMICOLON
-          ;
+
 funct_def : type ID '(' args ')' MOVS
           | void_def
           ;
@@ -148,6 +139,16 @@ control : RETURN ex SEMICOLON
         | BREAK SEMICOLON
         | CONTINUE SEMICOLON
         ;
+const_decl : CONST type const SEMICOLON ;
+const : const ',' ID '=' value
+      | ID '=' value
+      ;
+var_decl : type ids SEMICOLON ;
+funct_decl : type ID '(' args ')' SEMICOLON
+           | void_decl
+           ;
+void_decl : VOID ID '(' args ')' SEMICOLON
+          ;
 
 %%
 int yyerror(char *msg)
