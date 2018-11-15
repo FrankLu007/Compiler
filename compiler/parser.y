@@ -94,10 +94,10 @@ express : _express
 _express : _express ',' ex
          | ex
          ;
-type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 var : ID
     | ID array
     ;
+type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 id_v : ID '=' ex
      | ID array '=' '{' express '}'
      ;
