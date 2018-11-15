@@ -39,8 +39,8 @@ extern char buf[256];           /* declared in lex.l */
 
 program : declaration funct_defi def_and_decl
         ;
-def_and_decl : def_and_decl funct_defi
-             | def_and_decl declaration
+def_and_decl : def_and_decl declaration
+             | def_and_decl funct_defi
              |
              ;
 declaration : declaration const_decl
@@ -48,7 +48,11 @@ declaration : declaration const_decl
            | declaration funct_decl
            |
            ;
-const_decl : CONST type id_v SEMICOLON ;
+const_decl : CONST type const SEMICOLON ;
+const : const ',' ID '=' value
+      | ID '=' value
+      ;
+value : INT_Ｖ | FLOAT_V | STRING_V | TRUE | FALSE;
 var_decl : type ids SEMICOLON ;
 funct_decl : type ID '(' args ')' SEMICOLON
            | VOID ID '(' args ')' SEMICOLON
@@ -57,9 +61,7 @@ funct_defi : type ID '(' args ')' MOVS
            | VOID ID '(' args ')' MOVS
            ;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
-id_v : id_v ',' ID '=' express 
-     | id_v ',' ID array '=' '{' express '}'
-     | ID '=' express
+id_v : ID '=' express
      | ID array '=' '{' express '}'
      ;
 ids : ids ',' ID
