@@ -36,10 +36,11 @@ extern char buf[256];           /* declared in lex.l */
 %nonassoc ELSE
 %%
 
-program : declaration funct_defi def_and_decl
+program : declaration funct_def def_and_decl
         ;
 def_and_decl : def_and_decl funct_decl
-             | def_and_decl declaration
+             | def_and_decl const_decl
+             | def_and_decl var_decl
              | def_and_decl funct_def
              ;
 declaration : declaration const_decl
@@ -53,11 +54,15 @@ const : const ',' ID '=' value
       ;
 var_decl : type ids SEMICOLON ;
 funct_decl : type ID '(' args ')' SEMICOLON
-           | VOID ID '(' args ')' SEMICOLON
+           | void_decl
            ;
-funct_def : type ID '(' args ')' MOVS
-          | VOID ID '(' args ')' MOVS
+void_decl : VOID ID '(' args ')' SEMICOLON
           ;
+funct_def : type ID '(' args ')' MOVS
+          | void_def
+          ;
+void_def : VOID ID '(' args ')' MOVS
+         ;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 var : ID
     | ID array
@@ -72,7 +77,7 @@ ids : ids ',' var
     ;
 args: _args | ;
 _args: _args ',' type var
-     | var
+     | type var
      ;
 MOVS : '{' _MOVS '}';
 _MOVS : _MOVS const_decl
@@ -104,7 +109,7 @@ ex : ex AND ex
    | '(' ex ')' %prec '*'
    | value
    | var
-   | ID '(' express ')'
+   | funct_call
    ;
 funct_call : ID '(' express ')'
            ;
