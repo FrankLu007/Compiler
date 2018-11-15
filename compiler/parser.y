@@ -97,36 +97,6 @@ _express : _express ',' ex
 var : ID
     | ID array
     ;
-type : INT | DOUBLE | FLOAT | STRING | BOOL ;
-id_v : ID '=' ex
-     | ID array '=' '{' express '}'
-     ;
-ids : ids ',' var
-    | ids ',' id_v
-    | var
-    | id_v
-    ;
-args: _args 
-    | 
-    ;
-_args: _args ',' type var
-     | type var
-     ;
-_MOVS : _MOVS const_decl
-      | _MOVS var_decl
-      | _MOVS state
-      |
-      ;
-
-value : INT_V
-      | FLOAT_V
-      | STRING_V
-      | TRUE
-      | FALSE
-      ;
-array : array '[' INT_V ']' | '[' INT_V ']';
-
-
 cond : IF '(' ex ')' MOVS ELSE MOVS
      | IF '(' ex ')' MOVS
      ;
@@ -139,17 +109,43 @@ control : RETURN ex SEMICOLON
         | BREAK SEMICOLON
         | CONTINUE SEMICOLON
         ;
+_MOVS : _MOVS const_decl
+      | _MOVS var_decl
+      | _MOVS state
+      |
+      ;
 const_decl : CONST type const SEMICOLON ;
 const : const ',' ID '=' value
       | ID '=' value
       ;
+value : INT_V
+      | FLOAT_V
+      | STRING_V
+      | TRUE
+      | FALSE
+      ;
 var_decl : type ids SEMICOLON ;
+type : INT | DOUBLE | FLOAT | STRING | BOOL ;
+array : array '[' INT_V ']' | '[' INT_V ']';
+id_v : ID '=' ex
+     | ID array '=' '{' express '}'
+     ;
+ids : ids ',' var
+    | ids ',' id_v
+    | var
+    | id_v
+    ;
 funct_decl : type ID '(' args ')' SEMICOLON
            | void_decl
            ;
 void_decl : VOID ID '(' args ')' SEMICOLON
           ;
-
+args: _args 
+    | 
+    ;
+_args: _args ',' type var
+     | type var
+     ;
 %%
 int yyerror(char *msg)
 {
