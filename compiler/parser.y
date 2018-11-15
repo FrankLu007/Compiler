@@ -52,7 +52,7 @@ const_decl : CONST type const SEMICOLON ;
 const : const ',' ID '=' value
       | ID '=' value
       ;
-value : INT_Ｖ | FLOAT_V | STRING_V | TRUE | FALSE;
+value : INT_V | FLOAT_V | STRING_V | TRUE | FALSE;
 var_decl : type ids SEMICOLON ;
 funct_decl : type ID '(' args ')' SEMICOLON
            | VOID ID '(' args ')' SEMICOLON
@@ -96,11 +96,7 @@ ex : ex AND ex
    | ex op ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
-   | INT_V
-   | FLOAT_V
-   | STRING_V
-   | TRUE
-   | FALSE
+   | value
    | ID array '=' ex
    | ID '=' ex
    | ID '(' express ')'
