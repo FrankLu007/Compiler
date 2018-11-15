@@ -38,23 +38,22 @@ extern char buf[256];           /* declared in lex.l */
 
 program : declaration funct_defi def_and_decl
         ;
-def_and_decl : def_and_decl funct_defi
+def_and_decl : def_and_decl funct_decl
              | def_and_decl declaration
-             |
+             | def_and_decl funct_def
              ;
 declaration : declaration const_decl
-           | declaration var_decl
-           | declaration funct_decl
-           |
-           ;
+            | declaration var_decl
+            | declaration funct_decl
+            ;
 const_decl : CONST type id_v SEMICOLON ;
 var_decl : type ids SEMICOLON ;
 funct_decl : type ID '(' args ')' SEMICOLON
            | VOID ID '(' args ')' SEMICOLON
            ;
-funct_defi : type ID '(' args ')' MOVS
-           | VOID ID '(' args ')' MOVS
-           ;
+funct_def : type ID '(' args ')' MOVS
+          | VOID ID '(' args ')' MOVS
+          ;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 id_v : id_v ',' ID '=' express 
      | id_v ',' ID array '=' '{' express '}'
@@ -112,11 +111,11 @@ state : MOVS
       | for
       | control
       ;
-a_mov : ID array '=' ex
-      | ID '=' ex
-      | PRINT ex
-      | READ ex
-      | ex
+a_mov : ID array '=' ex SEMICOLON
+      | ID '=' ex SEMICOLON
+      | PRINT ex SEMICOLON
+      | READ ex SEMICOLON
+      | ex SEMICOLON
       ;
 cond : IF '(' ex ')' MOVS ELSE MOVS
      | IF '(' ex ')' MOVS
