@@ -39,7 +39,9 @@ extern char buf[256];           /* declared in lex.l */
 
 program : declaration funct_defi def_and_decl
         ;
-def_and_decl : def_and_decl declaration
+def_and_decl : def_and_decl const_decl
+             | def_and_decl var_decl
+             | def_and_decl funct_decl
              | def_and_decl funct_defi
              |
              ;
