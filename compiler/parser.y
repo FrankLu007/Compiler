@@ -40,6 +40,7 @@ def_and_decl : def_and_decl funct_decl
              | def_and_decl const_decl
              | def_and_decl var_decl
              | def_and_decl funct_def
+             |
              ;
 declaration : declaration const_decl
             | declaration var_decl
@@ -89,13 +90,20 @@ express : _express
 _express : _express ',' ex
          | ex
          ;
-cmp : EQUAL | GREATEREQUAL | NOTEQUAL | LESSEQUAL | '>' | '<';
-op : '+' | '-' | '*' | '/' | '%';
 ex : ex AND ex
    | ex OR ex
    | '!' ex
-   | ex cmp ex
-   | ex 'op ex
+   | ex '>' ex
+   | ex '<' ex
+   | ex EQUAL ex
+   | ex GREATEREQUAL ex
+   | ex NOTEQUAL ex
+   | ex LESSEQUAL ex
+   | ex '+' ex
+   | ex '-' ex
+   | ex '*' ex
+   | ex '/' ex
+   | ex '%' ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
    | value
