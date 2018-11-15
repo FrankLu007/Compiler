@@ -62,36 +62,19 @@ funct_def : type ID '(' args ')' MOVS
           ;
 void_def : VOID ID '(' args ')' MOVS
          ;
-type : INT | DOUBLE | FLOAT | STRING | BOOL ;
-var : ID
-    | ID array
-    ;
-id_v : ID '=' ex
-     | ID array '=' '{' express '}'
-     ;
-ids : ids ',' var
-    | ids ',' id_v
-    | var
-    | id_v
-    ;
-args: _args 
-    | 
-    ;
-_args: _args ',' type var
-     | type var
-     ;
-MOVS : '{' _MOVS '}';
-_MOVS : _MOVS const_decl
-      | _MOVS var_decl
-      | _MOVS state
-      |
+state : MOVS
+      | a_mov
+      | cond
+      | for
+      | while
+      | control
       ;
-express : _express 
-        | 
-        ;
-_express : _express ',' ex
-         | ex
-         ;
+MOVS : '{' _MOVS '}';
+a_mov : var '=' ex SEMICOLON
+      | PRINT ex SEMICOLON
+      | READ var SEMICOLON
+      | ex SEMICOLON
+      ;
 ex : ex AND ex
    | ex OR ex
    | '!' ex
@@ -114,6 +97,36 @@ ex : ex AND ex
    ;
 funct_call : ID '(' express ')'
            ;
+express : _express 
+        | 
+        ;
+_express : _express ',' ex
+         | ex
+         ;
+type : INT | DOUBLE | FLOAT | STRING | BOOL ;
+var : ID
+    | ID array
+    ;
+id_v : ID '=' ex
+     | ID array '=' '{' express '}'
+     ;
+ids : ids ',' var
+    | ids ',' id_v
+    | var
+    | id_v
+    ;
+args: _args 
+    | 
+    ;
+_args: _args ',' type var
+     | type var
+     ;
+_MOVS : _MOVS const_decl
+      | _MOVS var_decl
+      | _MOVS state
+      |
+      ;
+
 value : INT_V
       | FLOAT_V
       | STRING_V
@@ -121,18 +134,8 @@ value : INT_V
       | FALSE
       ;
 array : array '[' INT_V ']' | '[' INT_V ']';
-state : MOVS
-      | a_mov
-      | cond
-      | for
-      | while
-      | control
-      ;
-a_mov : var '=' ex SEMICOLON
-      | PRINT ex SEMICOLON
-      | READ var SEMICOLON
-      | ex SEMICOLON
-      ;
+
+
 cond : IF '(' ex ')' MOVS ELSE MOVS
      | IF '(' ex ')' MOVS
      ;
