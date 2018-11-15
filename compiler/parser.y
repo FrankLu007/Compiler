@@ -37,7 +37,8 @@ extern char buf[256];           /* declared in lex.l */
 %nonassoc ELSE
 %%
 
-program : declaration funct_defi decl_and_def_list;
+program : declaration funct_defi decl_and_def_list
+        ;
 decl_and_def_list : decl_and_def_list funct_decl
       | decl_and_def_list var_decl
       | decl_and_def_list const_decl
@@ -45,12 +46,15 @@ decl_and_def_list : decl_and_def_list funct_decl
       |
       ;
 declaration : declaration const_decl
-                 | declaration var_decl
-                 | declaration funct_decl
-                 | 
-                 ;
-funct_defi : type ID '(' argument_list ')' MOVS | void_defi;
-void_defi : VOID ID '(' argument_list ')' MOVS;
+            | declaration var_decl
+            | declaration funct_decl
+            | 
+            ;
+funct_defi : type ID '(' argument_list ')' MOVS 
+           | void_defi
+           ;
+void_defi : VOID ID '(' argument_list ')' MOVS
+          ;
 state : MOVS 
           | simple
           | cond
@@ -58,17 +62,28 @@ state : MOVS
           | for
           | control
           ;
-MOVS : '{' _MOVS '}';
-simple : simple_content SEMICOLON;
-
-
+MOVS : '{' _MOVS '}'
+     ;
+simple : simple_content SEMICOLON
+     ;
 simple_content : var '=' ex
                | PRINT ex
                | READ var
                | ex
                ;
-cmp : '<' | '>' | EQUAL | NOTEQUAL | GREATEREQUAL | LESSEQUAL | EQUAL;
-op : '+' | '-' | '*' | '/' | '%';
+cmp : '<' 
+    | '>' 
+    | EQUAL 
+    | NOTEQUAL 
+    | GREATEREQUAL 
+    | LESSEQUAL 
+    | EQUAL
+    ;
+op : '+' 
+   | '-' 
+   | '*' 
+   | '/' 
+   | '%';
 ex : ex OR ex
    | ex AND ex
    | '!' ex
@@ -80,54 +95,51 @@ ex : ex OR ex
    | var
    | funct_call
    ;
-
-funct_call : ID '(' express ')' ;
-
-express : _express | ;
-
-_express : _express ',' ex | ex ;
-
-var : ID | array_reference ;
-
+funct_call : ID '(' express ')' 
+           ;
+express : _express 
+        |
+        ;
+_express : _express ',' ex 
+         | ex 
+         ;
+var : ID 
+    | array_reference 
+    ;
 array_reference : ID arr_reference_square
                 ;
-
 arr_reference_square : arr_reference_square square_ex
                      | square_ex
                      ;
 square_ex : '[' ex ']'
-                  ;
-
+          ;
 cond : IF '(' ex ')' MOVS ELSE MOVS 
      | IF '(' ex ')' MOVS
      ;
-
 while : WHILE '(' ex ')' MOVS
       | DO MOVS WHILE '(' ex ')' SEMICOLON
       ;
-
-for : FOR '(' for_ex SEMICOLON for_ex SEMICOLON for_ex ')' MOVS ;
-
+for : FOR '(' for_ex SEMICOLON for_ex SEMICOLON for_ex ')' MOVS 
+    ;
 control : RETURN ex SEMICOLON
-     | BREAK SEMICOLON
-     | CONTINUE SEMICOLON
-     ;
-
-for_ex : ID '=' ex | ex ;
-
+        | BREAK SEMICOLON
+        | CONTINUE SEMICOLON
+        ;
+for_ex : ID '=' ex 
+       | ex 
+       ;
 _MOVS : _MOVS const_decl
       | _MOVS var_decl
       | _MOVS state
       | 
       ;
-
-const_decl : CONST type const_list SEMICOLON ;
-
-const_list : const_list ',' const | const ;
-
+const_decl : CONST type const_list SEMICOLON 
+           ;
+const_list : const_list ',' const 
+           | const 
+           ;
 const : ID '=' value
       ;
-
 value : INT_LIT
       | STRING_LIT
       | FLOAT_LIT
@@ -135,16 +147,14 @@ value : INT_LIT
       | TRUE
       | FALSE
       ;
-
-var_decl : type identifier_list SEMICOLON ;
-
+var_decl : type identifier_list SEMICOLON 
+         ;
 type : INT
      | DOUBLE
      | FLOAT
      | STRING
      | BOOL
      ; 
-
 identifier_list : identifier_list ',' identifier
                 | identifier
                 ;
@@ -152,32 +162,31 @@ identifier_list : identifier_list ',' identifier
 identifier : identifier_no_initial
            | identifier_with_initial
            ;
-
 identifier_no_initial : ID
                       | ID array
                       ;
 identifier_with_initial : ID '=' ex
                         | ID array '=' initial_array
                         ;
-
 initial_array : '{' express '}'
               ;
-
 array : array '[' INT_LIT ']'
       | '[' INT_LIT ']'
       ;
+funct_decl : type ID '(' argument_list ')' SEMICOLON 
+           | void_decl
+           ;
 
-funct_decl : type ID '(' argument_list ')' SEMICOLON | void_decl;
-
-void_decl : VOID ID '(' argument_list ')' SEMICOLON;
-
+void_decl : VOID ID '(' argument_list ')' SEMICOLON
+          ;
 argument_list : nonEmptyArgumentList
               |
               ;
 nonEmptyArgumentList : nonEmptyArgumentList ',' argument
                      | argument
                      ;
-argument : type identifier_no_initial;
+argument : type identifier_no_initial
+         ;
 
 %%
 int yyerror(char *msg)
