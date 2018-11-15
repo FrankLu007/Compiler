@@ -47,7 +47,10 @@ declaration : declaration const_decl
             | declaration funct_decl
             |
             ;
-const_decl : CONST type id_v SEMICOLON ;
+const_decl : CONST type const SEMICOLON ;
+const : const ',' ID '=' value
+      | ID '=' value
+      ;
 var_decl : type ids SEMICOLON ;
 funct_decl : type ID '(' args ')' SEMICOLON
            | VOID ID '(' args ')' SEMICOLON
@@ -56,23 +59,20 @@ funct_def : type ID '(' args ')' MOVS
           | VOID ID '(' args ')' MOVS
           ;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
-id_v : id_v ',' ID '=' express 
-     | id_v ',' ID array '=' '{' express '}'
-     | ID '=' express
+var : ID
+    | ID array
+    ;
+id_v : ID '=' ex
      | ID array '=' '{' express '}'
      ;
-ids : ids ',' ID
-    | ids ',' ID array
+ids : ids ',' var
     | ids ',' id_v
-    | ID
-    | ID array
+    | var
     | id_v
     ;
 args: _args | ;
-_args: _args ',' type ID
-     | _args ',' type ID array
-     | type ID
-     | type ID array
+_args: _args ',' type var
+     | var
      ;
 MOVS : '{' _MOVS '}';
 _MOVS : _MOVS const_decl
@@ -80,7 +80,9 @@ _MOVS : _MOVS const_decl
       | _MOVS state
       |
       ;
-express : _express | ;
+express : _express 
+        | 
+        ;
 _express : _express ',' ex
          | ex
          ;
@@ -101,10 +103,11 @@ ex : ex AND ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
    | value
-   | ID array '=' ex
-   | ID '=' ex
+   | var
    | ID '(' express ')'
    ;
+funct_call : ID '(' express ')'
+           ;
 value : INT_V
       | FLOAT_V
       | STRING_V
