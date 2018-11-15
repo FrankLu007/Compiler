@@ -8,8 +8,7 @@ extern char *yytext;            /* declared by lex */
 extern char buf[256];           /* declared in lex.l */
 %}
 %token SEMICOLON
-%token INT
-%token INT_V
+%token INT INT_V
 %token WHILE
 %token DO
 %token IF
@@ -21,18 +20,17 @@ extern char buf[256];           /* declared in lex.l */
 %token READ
 %token BOOL
 %token VOID
-%token FLOAT
-%token FLOAT_V
+%token FLOAT FLOAT_V
 %token DOUBLE
 %token STRING
 %token CONTINUE
 %token BREAK
 %token RETURN
 %token ID
-%token STRING
-%token STRING_V
+%token STRING STRING_V
 %right '=' '!'
 %left OR AND EQUAL NOTEQUAL GREATEREQUAL LESSEQUAL EQUAL '>' '<'
+%left '+' '-' '*' '/' '%'
 %nonassoc ELSE
 %%
 
@@ -91,20 +89,13 @@ express : _express
 _express : _express ',' ex
          | ex
          ;
+cmp : EQUAL | GREATEREQUAL | NOTEQUAL | LESSEQUAL | '>' | '<';
+op : '+' | '-' | '*' | '/' | '%';
 ex : ex AND ex
    | ex OR ex
    | '!' ex
-   | ex '>' ex
-   | ex '<' ex
-   | ex EQUAL ex
-   | ex GREATEREQUAL ex
-   | ex NOTEQUAL ex
-   | ex LESSEQUAL ex
-   | ex '+' ex
-   | ex '-' ex
-   | ex '*' ex
-   | ex '/' ex
-   | ex '%' ex
+   | ex cmp ex
+   | ex 'op ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
    | value
