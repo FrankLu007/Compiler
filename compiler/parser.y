@@ -56,12 +56,9 @@ const : const ',' ID '=' value
       ;
 value : INT_V | FLOAT_V | STRING_V | TRUE | FALSE;
 var_decl : type ids SEMICOLON ;
-funct_decl : type ID '(' args ')' SEMICOLON
-           | VOID ID '(' args ')' SEMICOLON
-           ;
-funct_defi : type ID '(' args ')' MOVS
-           | VOID ID '(' args ')' MOVS
-           ;
+funct_decl : type_void ID '(' args ')' SEMICOLON;
+funct_defi : type_void ID '(' args ')' MOVS;
+type_void : type | VOID;
 type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 id_v : ID '=' express
      | ID array '=' '{' express '}'
@@ -72,10 +69,8 @@ ids : ids ',' var_f
     | id_v
     ;
 args: _args | ;
-_args: _args ',' type ID
-     | _args ',' type ID array
-     | type ID
-     | type ID array
+_args: _args ',' type var_f
+     | type var_f
      ;
 MOVS : '{' _MOVS '}';
 _MOVS : _MOVS const_decl
@@ -98,8 +93,9 @@ ex : ex AND ex
    | '(' ex ')' %prec '*'
    | value
    | var_f
-   | ID '(' express ')'
+   | func_call
    ;
+func_call : ID '(' express ')';
 var_f : ID array | ID;
 array : array '[' INT_V ']' | '[' INT_V ']';
 state : MOVS
