@@ -99,10 +99,10 @@ ex : ex AND ex
    | '-' ex %prec '*'
    | '(' ex ')' %prec '*'
    | value
-   | ID array '=' ex
-   | ID '=' ex
+   | var_f
    | ID '(' express ')'
    ;
+var_f : ID array | ID;
 array : array '[' INT_V ']' | '[' INT_V ']';
 state : MOVS
       | a_mov
@@ -111,10 +111,9 @@ state : MOVS
       | for
       | control
       ;
-a_mov : ID array '=' ex SEMICOLON
-      | ID '=' ex SEMICOLON
+a_mov : var_f '=' ex SEMICOLON
       | PRINT ex SEMICOLON
-      | READ ex SEMICOLON
+      | READ var_f SEMICOLON
       | ex SEMICOLON
       ;
 cond : IF '(' ex ')' MOVS ELSE MOVS
