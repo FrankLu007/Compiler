@@ -74,7 +74,9 @@ ids : ids ',' var
     | var
     | id_v
     ;
-args: _args | ;
+args: _args 
+    | 
+    ;
 _args: _args ',' type var
      | type var
      ;
@@ -122,14 +124,13 @@ array : array '[' INT_V ']' | '[' INT_V ']';
 state : MOVS
       | a_mov
       | cond
-      | while
       | for
+      | while
       | control
       ;
-a_mov : ID array '=' ex SEMICOLON
-      | ID '=' ex SEMICOLON
+a_mov : var '=' ex SEMICOLON
       | PRINT ex SEMICOLON
-      | READ ex SEMICOLON
+      | READ var SEMICOLON
       | ex SEMICOLON
       ;
 cond : IF '(' ex ')' MOVS ELSE MOVS
