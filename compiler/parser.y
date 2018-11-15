@@ -50,7 +50,7 @@ declaration : declaration const_decl
            | declaration funct_decl
            |
            ;
-const_decl : CONST type const SEMICOLON ;
+const_decl : CONST type id_v SEMICOLON ;
 const : const ',' ID '=' value
       | ID '=' value
       ;
@@ -66,11 +66,9 @@ type : INT | DOUBLE | FLOAT | STRING | BOOL ;
 id_v : ID '=' express
      | ID array '=' '{' express '}'
      ;
-ids : ids ',' ID
-    | ids ',' ID array
+ids : ids ',' var_f
     | ids ',' id_v
-    | ID
-    | ID array
+    | var_f
     | id_v
     ;
 args: _args | ;
