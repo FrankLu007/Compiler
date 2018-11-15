@@ -111,11 +111,11 @@ state : MOVS
       | for
       | control
       ;
-a_mov : ID array '=' ex
-      | ID '=' ex
-      | PRINT ex
-      | READ ex
-      | ex
+a_mov : ID array '=' ex SEMICOLON
+      | ID '=' ex SEMICOLON
+      | PRINT ex SEMICOLON
+      | READ ex SEMICOLON
+      | ex SEMICOLON
       ;
 cond : IF '(' ex ')' MOVS ELSE MOVS
      | IF '(' ex ')' MOVS
@@ -123,9 +123,6 @@ cond : IF '(' ex ')' MOVS ELSE MOVS
 while : WHILE '(' ex ')' MOVS
       | DO MOVS WHILE '(' ex ')' SEMICOLON
       ;
-IO : PRINT ex
-   | READ ID '=' ex
-   ;
 for : FOR '(' ex_for SEMICOLON ex_for SEMICOLON ex_for ')';
 ex_for : ID '=' ex | ex ;
 control : RETURN ex SEMICOLON
